@@ -62,16 +62,7 @@ with col1:
 - Monitor blood pressure and cholesterol
 - Avoid alcohol & smoking
 """)
-       else:
-            st.success("🟢 Low Risk of Cardiovascular Disease.")
-            st.markdown("### ✅ Keep Up the Good Habits:")
-            st.markdown("""
-            - 🥗 Maintain a balanced diet  
-            - 🏃‍♂️ Continue regular physical activity  
-            - 🧘 Practice stress management (yoga/meditation)  
-            - 🛌 Ensure adequate sleep and hydration  
-            - 🩺 Regular health checkups help stay ahead  
-            """)
+      
 
 with col2:
     st.image("https://img.freepik.com/free-vector/doctor-with-stethoscope-heart_1308-65171.jpg", width=500)
