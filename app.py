@@ -70,8 +70,8 @@ with col2:
 st.markdown("---")
 st.markdown("""
 <p style='text-align: center; font-size: 14px;'>
-Developed as part of B.Sc. CS Final Year Project by <b>Siddhika Belsare</b><br>
-Supervised by <b>Prof. Sanjana Bhangale</b><br>
+Developed as part of MCA Final Year Project by <b>Siddhika Belsare</b><br>
+Supervised by <b>Prof. Shubhangi Mahadik</b><br>
 Dataset: <a href='https://www.kaggle.com/datasets/alphiree/cardiovascular-diseases-risk-prediction-dataset' target='_blank'>Kaggle CVD Dataset</a>
 </p>
 """, unsafe_allow_html=True)
