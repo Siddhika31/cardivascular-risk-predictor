@@ -1,76 +1,78 @@
+
 import streamlit as st
 import numpy as np
 import joblib
 
-model = joblib.load('cardio_model.pkl')
-st.set_page_config(page_title="Heart Risk AI", page_icon="🫀", layout="wide")
+# Load model
+model = joblib.load("cardio_model.pkl")
+
+# Page config
+st.set_page_config(page_title="Cardiovascular Disease Risk Predictor", layout="wide")
 
 # Header
-st.markdown("<h1 style='text-align: center; color: crimson;'>🫀 Cardiovascular Disease Risk Prediction</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>A Machine Learning Based Health Screening Tool</p>", unsafe_allow_html=True)
-st.markdown("---")
+st.title("🫀 Cardiovascular Disease Risk Prediction App")
+st.markdown("Use this AI-powered tool to estimate your risk for cardiovascular disease.")
 
-# Sidebar
-st.sidebar.header("🧾 Enter Patient Details")
-age = st.sidebar.slider("Age", 18, 100, 45)
-bmi = st.sidebar.slider("BMI", 10.0, 50.0, 22.0)
-sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
-exercise = st.sidebar.radio("Exercise Regularly?", ["Yes", "No"])
-smoking = st.sidebar.selectbox("Smoking History", ["Never", "Former", "Current"])
-alcohol = st.sidebar.slider("Alcohol (drinks/week)", 0, 30, 2)
-fruit = st.sidebar.slider("Fruit Intake (servings/day)", 0, 10, 3)
-greens = st.sidebar.slider("Green Veg Intake (servings/day)", 0, 10, 4)
-fried = st.sidebar.slider("Fried Potato Intake (servings/week)", 0, 10, 2)
-checkup = st.sidebar.radio("Had recent health checkup?", ["Yes", "No"])
-
-# Encoding inputs
-sex_encoded = 1 if sex == "Male" else 0
-exercise_encoded = 1 if exercise == "Yes" else 0
-smoking_encoded = {"Never": 0, "Former": 1, "Current": 2}[smoking]
-checkup_encoded = 1 if checkup == "Yes" else 0
-
-input_data = np.array([[age, bmi, sex_encoded, exercise_encoded, smoking_encoded,
-                        alcohol, fruit, greens, fried, checkup_encoded]])
-
-# Layout columns
-col1, col2 = st.columns([1, 2])
+# Layout with two columns
+col1, col2 = st.columns([1, 1])
 
 with col1:
-    if st.button("🔍 Predict Risk"):
+    st.header("📝 Enter Your Health Details")
+
+    age = st.slider("Age", 18, 90, 30)
+    bmi = st.slider("BMI (Body Mass Index)", 10.0, 50.0, 22.0)
+    sex = st.radio("Sex", ("Male", "Female"))
+    exercise = st.radio("Do you exercise regularly?", ("Yes", "No"))
+    smoking = st.radio("Do you smoke?", ("Yes", "No"))
+    alcohol = st.slider("Alcohol consumption (drinks/week)", 0.0, 20.0, 2.0)
+    fruit = st.slider("Fruit consumption (servings/day)", 0.0, 10.0, 2.0)
+    greens = st.slider("Green vegetables consumption (servings/day)", 0.0, 10.0, 2.0)
+    fried = st.slider("Fried potato consumption (servings/week)", 0.0, 10.0, 1.0)
+    checkup = st.radio("Regular health checkups?", ("Yes", "No"))
+
+    if st.button("Predict Risk"):
+        # Preprocess inputs
+        sex = 1 if sex == "Male" else 0
+        exercise = 1 if exercise == "Yes" else 0
+        smoking = 1 if smoking == "Yes" else 0
+        checkup = 1 if checkup == "Yes" else 0
+
+        input_data = np.array([[
+            age, bmi, sex, exercise, smoking,
+            alcohol, fruit, greens, fried, checkup
+        ]])
+
+        # Predict
         prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0][1]
-        risk = "🛑 High Risk" if prediction == 1 else "✅ Low Risk"
-        color = "#FF4B4B" if prediction == 1 else "#28A745"
-
-        st.markdown(f"""
-        <div style='background-color:{color};padding:15px;border-radius:10px'>
-            <h2 style='color:white;text-align:center'>{risk}</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.metric(label="Model Confidence", value=f"{round(probability * 100, 2)}%")
 
         if prediction == 1:
-            st.markdown("### 💡 Suggested Tips")
+            st.error("🔴 High Risk of Cardiovascular Disease!")
+            st.markdown("### 🔍 Suggestions to Lower Risk:")
             st.markdown("""
-            - Consult a cardiologist  
-            - Reduce fried/high-sugar foods  
-            - Exercise regularly  
-            - Monitor BP & cholesterol  
-            - Avoid smoking & alcohol  
+            - 🩺 **Consult a cardiologist** for advanced screening
+            - 🥗 Improve your diet: more fiber, fruits, and greens
+            - 🚭 Stop smoking if applicable
+            - 🏃‍♂️ Exercise at least 30 mins/day
+            - 🧘 Reduce stress through meditation or yoga
+            - 🔬 Monitor blood pressure and cholesterol regularly
             """)
         else:
-            st.markdown("### ✅ Keep It Up!")
+            st.success("🟢 Low Risk of Cardiovascular Disease.")
+            st.markdown("### ✅ Keep Up the Good Habits:")
             st.markdown("""
-            - Maintain regular exercise  
-            - Keep eating fruits and greens  
-            - Stay away from smoking and junk food  
-            - Do annual checkups  
-            - Sleep well and manage stress  
+            - 🥗 Maintain a balanced diet
+            - 🏃‍♂️ Continue regular physical activity
+            - 🧘 Practice stress management (yoga/meditation)
+            - 🛌 Ensure adequate sleep and hydration
+            - 🩺 Regular health checkups help stay ahead
             """)
 
 with col2:
-    st.image("https://img.freepik.com/free-vector/doctor-with-stethoscope-heart_1308-65171.jpg", width=500)
+    st.image(
+        "https://media.tenor.com/MEP9bkszV9gAAAAC/heart-health.gif",
+        width=400,
+        caption="Cardiovascular Monitoring",
+    )
 
 # Footer
 st.markdown("---")
